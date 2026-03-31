@@ -27,6 +27,7 @@ export class MenuProcessor {
       menuList = await this.processFrontendMenu()
     } else {
       menuList = await this.processBackendMenu()
+      console.log('[MenuProcessor] 后端菜单数据:', menuList)
     }
 
     // 在规范化路径之前，验证原始路径配置

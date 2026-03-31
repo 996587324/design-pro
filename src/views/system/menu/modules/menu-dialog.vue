@@ -45,7 +45,7 @@
   import type { FormItem } from '@/components/core/forms/art-form/index.vue'
   import ArtForm from '@/components/core/forms/art-form/index.vue'
   import { useWindowSize } from '@vueuse/core'
-
+  import { fetchSetMenu } from '@/api/system-manage'
   const { width } = useWindowSize()
 
   /**
@@ -69,32 +69,7 @@
       ])
   }
 
-  interface MenuFormData {
-    id: number
-    name: string
-    path: string
-    label: string
-    component: string
-    icon: string
-    isEnable: boolean
-    sort: number
-    isMenu: boolean
-    keepAlive: boolean
-    isHide: boolean
-    isHideTab: boolean
-    link: string
-    isIframe: boolean
-    showBadge: boolean
-    showTextBadge: string
-    fixedTab: boolean
-    activePath: string
-    roles: string[]
-    isFullPage: boolean
-    authName: string
-    authLabel: string
-    authIcon: string
-    authSort: number
-  }
+ 
 
   interface Props {
     visible: boolean
@@ -105,7 +80,7 @@
 
   interface Emits {
     (e: 'update:visible', value: boolean): void
-    (e: 'submit', data: MenuFormData): void
+    (e: 'submit', data: Api.SystemManage.MenuFormData): void
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -119,7 +94,7 @@
   const formRef = ref()
   const isEdit = ref(false)
 
-  const form = reactive<MenuFormData & { menuType: 'menu' | 'button' }>({
+  const form = reactive<Api.SystemManage.MenuFormData & { menuType: 'menu' | 'button' }>({
     menuType: 'menu',
     id: 0,
     name: '',
@@ -331,6 +306,9 @@
     try {
       await formRef.value.validate()
       emit('submit', { ...form })
+      console.log('提交数据', form);
+      const list   = await fetchSetMenu(form);
+      console.log('新增路由信息结果', list);
       ElMessage.success(`${isEdit.value ? '编辑' : '新增'}成功`)
       handleCancel()
     } catch {

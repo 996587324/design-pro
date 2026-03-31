@@ -6,12 +6,17 @@ import request from '@/utils/http'
  * @returns 登录响应
  */
 export function fetchLogin(params: Api.Auth.LoginParams) {
-  return request.get<Api.Auth.LoginResponse>({
-    url: '/api/Login/GetToken',
-    params
+  console.log("登录结果参数",params)
+  var item = request.post<Api.Auth.LoginResponse>({
+   // url: '/api/Login/GetToken',
+    url: '/api/auth/login',
+    params: params
     // showSuccessMessage: true // 显示成功消息
     // showErrorMessage: false // 不显示错误消息
-  })
+  });
+    
+    console.log("登录结果",item)
+  return item;
 }
 
 /**
@@ -34,7 +39,8 @@ export function GetSalesRevenue() {
  */
 export function fetchGetUserInfo() {
   return request.get<Api.Auth.UserInfo>({
-    url: '/api/user/info'
+   // url: '/api/user/info'
+    url: '/api/UserInfo/GetUserInfo'
     // 自定义请求头
     // headers: {
     //   'X-Custom-Header': 'your-custom-value'

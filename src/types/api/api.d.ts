@@ -125,6 +125,33 @@ declare namespace Api {
       enabled: boolean
       createTime: string
     }
+    //路由信息
+     interface MenuFormData {
+    id: number
+    name: string
+    path: string
+    label: string
+    component: string
+    icon: string
+    isEnable: boolean
+    sort: number
+    isMenu: boolean
+    keepAlive: boolean
+    isHide: boolean
+    isHideTab: boolean
+    link: string
+    isIframe: boolean
+    showBadge: boolean
+    showTextBadge: string
+    fixedTab: boolean
+    activePath: string
+    roles: string[]
+    isFullPage: boolean
+    authName: string
+    authLabel: string
+    authIcon: string
+    authSort: number
+  }
 
     /** 角色搜索参数 */
     type RoleSearchParams = Partial<

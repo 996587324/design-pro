@@ -72,7 +72,7 @@ axiosInstance.interceptors.request.use(
       : request.url;
 
     // 现在打印的就是带 IP+端口的完整 URL 了
-    showSuccess('【完整请求URL】:' + request.baseURL); 
+    showSuccess('【完整请求URL】:' +fullUrl); 
     const { accessToken } = useUserStore()
     if (accessToken) request.headers.set('Authorization', accessToken)
 
@@ -196,7 +196,7 @@ async function request<T = any>(config: ExtendedAxiosRequestConfig): Promise<T> 
       const showMsg = config.showErrorMessage !== false
       showError(error, showMsg)
     }
-    return Promise.reject(error)
+    return Promise.reject(config)
   }
 }
 

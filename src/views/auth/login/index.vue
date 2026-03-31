@@ -149,7 +149,7 @@
     {
       key: 'admin',
       label: t('login.roles.admin'),
-      userName: 'Admin',
+      userName: 'admin',
       password: '123456',
       roles: ['R_ADMIN']
     },
@@ -188,7 +188,7 @@
   const loading = ref(false)
 
   onMounted(() => {
-    setupAccount('super')
+    setupAccount('admin')
   })
 
   // 设置账号
@@ -223,7 +223,7 @@
         userName: username,
         password
       })
-
+      console.log("登录结果",token,refreshToken)
       // 验证token
       if (!token) {
         throw new Error('Login failed - no token received')
