@@ -45,7 +45,7 @@
   import type { FormItem } from '@/components/core/forms/art-form/index.vue'
   import ArtForm from '@/components/core/forms/art-form/index.vue'
   import { useWindowSize } from '@vueuse/core'
-  import { fetchSetMenu } from '@/api/system-manage'
+
   const { width } = useWindowSize()
 
   /**
@@ -75,6 +75,7 @@
     visible: boolean
     editData?: AppRouteRecord | any
     type?: 'menu' | 'button'
+    action:'add' | 'edit'
     lockType?: boolean
   }
 
@@ -119,7 +120,8 @@
     authName: '',
     authLabel: '',
     authIcon: '',
-    authSort: 1
+    authSort: 1,
+    action: 'add'
   })
 
   const rules = reactive<FormRules>({
@@ -195,12 +197,12 @@
         },
         {
           label: createLabelTooltip(
-            '激活路径',
-            '用于详情页等隐藏菜单，指定高亮显示的父级菜单路径\n例如：用户详情页高亮显示"用户管理"菜单'
+            '父路径',
+            '配置父级菜单路径（如：/system）\n'
           ),
           key: 'activePath',
           type: 'input',
-          props: { placeholder: '如：/system/user' }
+          props: { placeholder: '如：/system' }
         },
         { label: '是否启用', key: 'isEnable', type: 'switch', span: switchSpan },
         { label: '页面缓存', key: 'keepAlive', type: 'switch', span: switchSpan },
@@ -257,6 +259,10 @@
     formRef.value?.reset()
     form.menuType = 'menu'
   }
+const getParentPath = (path: string) => {
+  const parts = path.split('/').filter(Boolean)
+  return parts.length <= 1 ? '' : '/' + parts[0]
+}
 
   /**
    * 加载表单数据（编辑模式）
@@ -285,9 +291,11 @@
       form.showBadge = row.meta?.showBadge ?? false
       form.showTextBadge = row.meta?.showTextBadge || ''
       form.fixedTab = row.meta?.fixedTab ?? false
-      form.activePath = row.meta?.activePath || ''
+      form.activePath = getParentPath(row.component || '')
       form.roles = row.meta?.roles || []
       form.isFullPage = row.meta?.isFullPage ?? false
+
+      
     } else {
       const row = props.editData
       form.authName = row.title || ''
@@ -295,6 +303,7 @@
       form.authIcon = row.icon || ''
       form.authSort = row.sort || 1
     }
+
   }
 
   /**
@@ -306,10 +315,10 @@
     try {
       await formRef.value.validate()
       emit('submit', { ...form })
-      console.log('提交数据', form);
-      const list   = await fetchSetMenu(form);
-      console.log('新增路由信息结果', list);
-      ElMessage.success(`${isEdit.value ? '编辑' : '新增'}成功`)
+      // console.log('提交数据', form);
+      // const list   = await fetchSetMenu(form);
+      // console.log('新增路由信息结果', list);
+     // ElMessage.success(`${isEdit.value ? '编辑' : '新增'}成功`)
       handleCancel()
     } catch {
       ElMessage.error('表单校验失败，请检查输入')
@@ -339,6 +348,8 @@
     (newVal) => {
       if (newVal) {
         form.menuType = props.type
+        form.action = props.action
+            console.log('Action:', props.action)
         nextTick(() => {
           if (props.editData) {
             loadFormData()

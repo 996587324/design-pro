@@ -33,10 +33,24 @@ export function fetchGetMenuList() {
 }
 
 //新增路由信息
-export function fetchSetMenu(params:Api.SystemManage.MenuFormData) {
+export function fetchSetMenu(params:any) {
   console.log("新增路由信息参数",params)
   var item = request.post<AppRouteRecord>({
     url: '/api/Menu/AddMenu',
+    params: params
+    // showSuccessMessage: true // 显示成功消息
+    // showErrorMessage: false // 不显示错误消息
+  });
+    
+    console.log("新增路由信息结果",item)
+  return item;
+}
+
+//新增路由信息
+export function fetchEditMenu(params:any) {
+  console.log("新增路由信息参数",params)
+  var item = request.post<AppRouteRecord>({
+    url: '/api/Menu/UpdateMenu',
     params: params
     // showSuccessMessage: true // 显示成功消息
     // showErrorMessage: false // 不显示错误消息

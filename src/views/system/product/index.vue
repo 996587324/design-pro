@@ -60,9 +60,9 @@
   import { useTable } from '@/hooks/core/useTable'
   import { fetchGetRoleList } from '@/api/system-manage'
   import ArtButtonMore from '@/components/core/forms/art-button-more/index.vue'
-  import RoleSearch from './modules/data-search.vue'
-  import RoleEditDialog from './modules/data-edit-dialog.vue'
-  import RolePermissionDialog from './modules/data-permission-dialog.vue'
+  import RoleSearch from './modules/Prod-search.vue'
+  import RoleEditDialog from './modules/Prod-edit-dialog.vue'
+  import RolePermissionDialog from './modules/Prod-permission-dialog.vue'
   import { ElTag, ElMessageBox } from 'element-plus'
 
   defineOptions({ name: 'Role' })

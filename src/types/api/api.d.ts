@@ -151,6 +151,7 @@ declare namespace Api {
     authLabel: string
     authIcon: string
     authSort: number
+    action:string
   }
 
     /** 角色搜索参数 */

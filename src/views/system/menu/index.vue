@@ -42,6 +42,7 @@
         v-model:visible="dialogVisible"
         :type="dialogType"
         :editData="editData"
+        :action="action"
         :lockType="lockMenuType"
         @submit="handleSubmit"
       />
@@ -55,9 +56,8 @@
   import { useTableColumns } from '@/hooks/core/useTableColumns'
   import type { AppRouteRecord } from '@/types/router'
   import MenuDialog from './modules/menu-dialog.vue'
-  import { fetchGetMenuList } from '@/api/system-manage'
+  import { fetchGetMenuList, fetchSetMenu ,fetchEditMenu} from '@/api/system-manage'
   import { ElTag, ElMessageBox } from 'element-plus'
-
   defineOptions({ name: 'Menus' })
 
   // 状态管理
@@ -70,6 +70,7 @@
   const dialogType = ref<'menu' | 'button'>('menu')
   const editData = ref<AppRouteRecord | any>(null)
   const lockMenuType = ref(false)
+  const action = ref<'add' | 'edit'>('add')
 
   // 搜索相关
   const initialSearchState = {
@@ -357,6 +358,7 @@
    */
   const handleAddMenu = (): void => {
     dialogType.value = 'menu'
+    action.value = 'add'
     editData.value = null
     lockMenuType.value = true
     dialogVisible.value = true
@@ -367,6 +369,7 @@
    */
   const handleAddAuth = (): void => {
     dialogType.value = 'menu'
+    action.value = 'add'
     editData.value = null
     lockMenuType.value = false
     dialogVisible.value = true
@@ -378,6 +381,7 @@
    */
   const handleEditMenu = (row: AppRouteRecord): void => {
     dialogType.value = 'menu'
+    action.value = 'edit'
     editData.value = row
     lockMenuType.value = true
     dialogVisible.value = true
@@ -407,6 +411,7 @@
     icon?: string
     roles?: string[]
     sort?: number
+    action:string
     [key: string]: any
   }
 
@@ -414,8 +419,19 @@
    * 提交表单数据
    * @param formData 表单数据
    */
-  const handleSubmit = (formData: MenuFormData): void => {
-    console.log('提交数据:', formData)
+  const handleSubmit = async(formData: MenuFormData): Promise<void> => {
+    console.log('提交数据111:', formData.action)
+    if(formData.action === 'add'){
+      console.log('新增数据:', formData)
+      var list = await fetchSetMenu(formData)
+      console.log('添加菜单接口返回数据:', list)
+      ElMessage.success('添加成功')
+    }
+    else if(formData.action === 'edit'){
+      var list = await fetchEditMenu(formData)
+      console.log('编辑菜单接口返回数据:', list)
+      ElMessage.success('编辑成功')
+    }
     // TODO: 调用API保存数据
     getMenuList()
   }
